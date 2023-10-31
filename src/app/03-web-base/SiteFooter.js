@@ -3,8 +3,7 @@ import Link from 'next/link';
 
 import { getNavLinks } from '@/helpers/web-base-helpers';
 
-async function SiteFooter() {
-  const navLinks = await getNavLinks();
+function SiteFooter() {
 
   return (
     <header className="site-footer">
@@ -22,17 +21,9 @@ async function SiteFooter() {
         <div className="col">
           <h2>Navigation</h2>
           <nav>
-            <ol>
-              {navLinks.map(
-                ({ slug, label, href }) => (
-                  <li key={slug}>
-                    <Link href={href}>
-                      {label}
-                    </Link>
-                  </li>
-                )
-              )}
-            </ol>
+            <React.Suspense>
+              <PrimaryNavLinks/>
+            </React.Suspense>
           </nav>
         </div>
         <div className="col">
@@ -56,6 +47,24 @@ async function SiteFooter() {
       </div>
     </header>
   );
+}
+
+async function PrimaryNavLinks(){
+  const navLinks = await getNavLinks();
+
+  return (
+    <ol>
+      {navLinks.map(
+        ({ slug, label, href }) => (
+          <li key={slug}>
+            <Link href={href}>
+              {label}
+            </Link>
+          </li>
+        )
+      )}
+    </ol>
+  )
 }
 
 export default SiteFooter;
